@@ -78,6 +78,7 @@ cat spec.md
 ```
 
 Find these critical sections:
+- **Feature Title**: Extract from the H1 header (first line starting with `# `) - remove any prefixes like "Specification:", "Spec:", "Feature:"
 - **Workflow Type**: feature, refactor, investigation, migration, or simple
 - **Services Involved**: which services and their roles
 - **Files to Modify**: specific changes per service
@@ -209,7 +210,7 @@ Based on the workflow type and services involved, create the implementation plan
 
 ```json
 {
-  "feature": "Short descriptive name for this task/feature",
+  "feature": "Brief title from spec.md (extract from H1 header or task description)",
   "workflow_type": "feature|refactor|investigation|migration|simple",
   "workflow_rationale": "Why this workflow type was chosen",
   "phases": [

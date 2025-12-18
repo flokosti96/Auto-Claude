@@ -9,6 +9,33 @@ import json
 from pathlib import Path
 
 
+def _extract_title_from_spec(spec_dir: Path) -> str:
+    """Extract feature title from spec.md file."""
+    spec_file = spec_dir / "spec.md"
+
+    if not spec_file.exists():
+        return "Unnamed Feature"
+
+    try:
+        with open(spec_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+
+        # Look for H1 header in first 10 lines
+        for line in lines[:10]:
+            line = line.strip()
+            if line.startswith("# "):
+                title = line[2:].strip()
+                # Remove common prefixes
+                for prefix in ["Specification:", "Spec:", "Feature:"]:
+                    if title.startswith(prefix):
+                        title = title[len(prefix):].strip()
+                return title
+    except Exception:
+        pass
+
+    return "Unnamed Feature"
+
+
 def auto_fix_plan(spec_dir: Path) -> bool:
     """Attempt to auto-fix common implementation_plan.json issues.
 
@@ -33,7 +60,8 @@ def auto_fix_plan(spec_dir: Path) -> bool:
 
     # Fix missing top-level fields
     if "feature" not in plan:
-        plan["feature"] = "Unnamed Feature"
+        # Extract title from spec.md instead of using generic "Unnamed Feature"
+        plan["feature"] = _extract_title_from_spec(spec_dir)
         fixed = True
 
     if "workflow_type" not in plan:
